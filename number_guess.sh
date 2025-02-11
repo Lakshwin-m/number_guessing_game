@@ -54,3 +54,15 @@ while [[ $NUMBER -ne $GUESS_NUMBER ]]; do
     fi
     ((GUESS_COUNT++))
 done
+
+if [[ -z "${USER_ARRAY}" ]]; then
+    UPDATE_USER=$($PSQL "UPDATE users SET games_played=1,best_game=$GUESS_COUNT WHERE username='$USERNAME'")
+else
+    GAMES_PLAYED=$((${USER_ARRAY[1]} + 1))
+    if [[ $GUESS_COUNT -lt ${USER_ARRAY[2]} ]]; then
+        UPDATE_USER=$($PSQL "UPDATE users SET games_played=$GAMES_PLAYED,best_game=$GUESS_COUNT WHERE username='$USERNAME'")
+    else
+        UPDATE_USER=$($PSQL "UPDATE users SET games_played=$GAMES_PLAYED WHERE username='$USERNAME'")
+    fi
+fi
+echo "You guessed it in $GUESS_COUNT tries. The secret number was $GUESS_NUMBER. Nice job!"
