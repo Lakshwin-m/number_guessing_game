@@ -37,3 +37,20 @@ else
     done
     echo "Welcome back, ${USER_ARRAY[0]}! You have played ${USER_ARRAY[1]} games, and your best game took ${USER_ARRAY[2]} guesses."
 fi
+
+# ---- RANDOM NUMBER && NUMBER OF GUESSES
+GUESS_NUMBER=$((RANDOM % 1000 + 1))
+GUESS_COUNT=1
+
+GUESS
+
+while [[ $NUMBER -ne $GUESS_NUMBER ]]; do
+    if ! [[ $NUMBER =~ ^[0-9]+$ ]]; then
+        GUESS "That is not an integer, guess again:"
+    elif [[ $NUMBER -lt $GUESS_NUMBER ]]; then
+        GUESS "It's higher than that, guess again:"
+    elif [[ $NUMBER -gt $GUESS_NUMBER ]]; then
+        GUESS "It's lower than that, guess again:"
+    fi
+    ((GUESS_COUNT++))
+done
